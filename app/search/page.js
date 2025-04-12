@@ -1,15 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion'; // For micro-animations
+import { motion, AnimatePresence } from 'framer-motion';
 
-export default function SearchPage() {
+// Separate the search functionality into a client component
+function SearchResults() {
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('q') || '';
     const [results, setResults] = useState([]);
@@ -90,19 +91,7 @@ export default function SearchPage() {
     };
 
     return (
-        <div className="py-10 max-w-3xl mx-auto px-4">
-            {/* Back button */}
-            <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
-            >
-                <Link href="/" className="inline-flex items-center text-sm mb-8 text-black/70 hover:text-black">
-                    <ArrowLeft size={16} className="mr-1" />
-                    Back to home
-                </Link>
-            </motion.div>
-
+        <>
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -211,6 +200,35 @@ export default function SearchPage() {
                     </AnimatePresence>
                 </motion.div>
             )}
+        </>
+    );
+}
+
+// Main page component with Suspense boundary
+export default function SearchPage() {
+    return (
+        <div className="py-10 max-w-3xl mx-auto px-4">
+            {/* Back button outside Suspense */}
+            <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+            >
+                <Link href="/" className="inline-flex items-center text-sm mb-8 text-black/70 hover:text-black">
+                    <ArrowLeft size={16} className="mr-1" />
+                    Back to home
+                </Link>
+            </motion.div>
+
+            {/* Wrap search results in Suspense */}
+            <Suspense fallback={
+                <div className="flex flex-col items-center justify-center py-20">
+                    <div className="w-10 h-10 border-2 border-black/20 border-t-black rounded-full animate-spin mb-4"></div>
+                    <p className="text-sm text-black/70">Loading search results...</p>
+                </div>
+            }>
+                <SearchResults />
+            </Suspense>
         </div>
     );
 }
