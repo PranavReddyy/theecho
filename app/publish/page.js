@@ -510,7 +510,7 @@ export default function PublishPage() {
                         className="w-full px-4 py-3 border border-black/20 focus:border-black transition-colors duration-200 outline-none"
                         placeholder="Enter your name"
                     />
-                    <p className="text-xs text-black/50 mt-1">Leave blank to publish as "Anonymous"</p>
+                    <p className="text-xs text-black/50 mt-1">Leave blank to publish as &quot;Anonymous&quot;</p>
                 </div>
 
                 <div className="mb-10">

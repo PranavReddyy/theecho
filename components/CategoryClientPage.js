@@ -164,7 +164,7 @@ export default function CategoryClientPage({ category }) {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                    Today's top campus stories
+                    Today&apos;s top campus stories
                 </motion.div>
             </div>
 
