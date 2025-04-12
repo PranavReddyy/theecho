@@ -609,7 +609,7 @@ export default function EventEditor({ eventId }) {
                             {/* Time */}
                             <div>
                                 <label htmlFor="time" className="block text-sm font-medium text-black/80 mb-1">
-                                    Time <span className="text-red-500">*</span> <span className="text-xs font-normal text-black/60">(e.g., "11:00 AM - 2:00 PM")</span>
+                                    Time <span className="text-red-500">*</span> <span className="text-xs font-normal text-black/60">(e.g., &quot;11:00 AM - 2:00 PM&quot;)</span>
                                 </label>
                                 <input
                                     type="text"
