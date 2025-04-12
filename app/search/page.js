@@ -114,7 +114,7 @@ export default function SearchPage() {
                     <p className="text-lg">
                         {searchQuery ? (
                             <>
-                                Showing results for: <span className="font-medium">"{searchQuery}"</span>
+                                Showing results for: <span className="font-medium">&quot;{searchQuery}&quot;</span>
                             </>
                         ) : (
                             'Please enter a search term'

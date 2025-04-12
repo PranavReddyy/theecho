@@ -324,7 +324,7 @@ export default function AboutPage() {
                     </p>
 
                     <p className="text-lg text-black/80 leading-relaxed">
-                        We are extremely grateful to be part of something that embodies the spirit and essence of our university, and as we move forward, we hope all of you reach out, engage with  us, and make &apos;The Echo&apos; your own
+                        We are extremely grateful to be part of something that embodies the spirit and essence of our university, and as we move forward, we hope all of you reach out, engage with us, and make &apos;The Echo&apos; your own
                     </p>
                 </div>
             </motion.section>
@@ -418,7 +418,7 @@ export default function AboutPage() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
                     >
-                        You're viewing an archived team roster. These members may have graduated or moved on to other roles.
+                        You&apos;re viewing an archived team roster. These members may have graduated or moved on to other roles.
                     </motion.div>
                 )}
             </section>
@@ -433,7 +433,7 @@ export default function AboutPage() {
                 <div className="max-w-3xl mx-auto text-center px-4">
                     <h2 className="text-2xl font-bold mb-6 text-center">Join The Echo</h2>
                     <p className="text-lg text-black/70 mb-10 leading-relaxed">
-                        The Echo welcomes students from all backgrounds and disciplines. Whether you're interested in writing, photography, design, or digital media, there's a place for you on our team.
+                        The Echo welcomes students from all backgrounds and disciplines. Whether you&apos;re interested in writing, photography, design, or digital media, there&apos;s a place for you on our team.
                     </p>
                     <motion.div
                         whileHover={{ scale: 1.02 }}
