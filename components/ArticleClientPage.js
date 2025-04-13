@@ -12,6 +12,8 @@ export default function ArticleClientPage({ category, slug }) {
     const [article, setArticle] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [scrollProgress, setScrollProgress] = useState(0);
+
 
     // IMPORTANT: Map URL category to database category (lowercase)
     const categoryMap = {
@@ -23,6 +25,22 @@ export default function ArticleClientPage({ category, slug }) {
 
     // Get current database category
     const dbCategory = categoryMap[category] || 'news';
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            setScrollProgress(progress);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         async function fetchArticle() {
@@ -112,6 +130,13 @@ export default function ArticleClientPage({ category, slug }) {
 
     return (
         <article className="py-10 max-w-3xl mx-auto">
+            {/* Progress bar (NYT style) */}
+            <div className="fixed top-0 left-0 w-full h-1 bg-transparent z-50">
+                <motion.div
+                    className="h-full bg-black"
+                    style={{ width: `${scrollProgress}%` }}
+                />
+            </div>
             {/* Back button */}
             <Link href={`/${category}`} className="inline-flex items-center text-sm mb-8 text-black/70 hover:text-black">
                 <ArrowLeft size={16} className="mr-1" />

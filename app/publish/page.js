@@ -169,6 +169,11 @@ export default function PublishPage() {
             errors.fullArticle = 'Article must be at least 300 characters';
         }
 
+        // Add image validation check
+        if (!formData.mediaFile) {
+            errors.mediaFile = 'Featured image is required';
+        }
+
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -180,7 +185,13 @@ export default function PublishPage() {
         if (!validateForm()) {
             // Scroll to first error
             const firstErrorField = Object.keys(formErrors)[0];
-            document.getElementById(firstErrorField)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Special case for mediaFile which doesn't have a direct ID
+            if (firstErrorField === 'mediaFile') {
+                fileInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                document.getElementById(firstErrorField)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
             return;
         }
 
@@ -347,7 +358,7 @@ export default function PublishPage() {
                                         <li>Keep language respectful and appropriate for all audiences.</li>
                                         <li>Original content only - plagiarism is strictly prohibited.</li>
                                         <li>Include sources for any factual claims or statistics.</li>
-                                        <li>Images should be high-quality and either original or properly licensed.</li>
+                                        <li>Images are <strong>required</strong> and should be high-quality and either original or properly licensed.</li>
                                         <li>Opinion pieces should be clearly labeled as such.</li>
                                     </ul>
                                 </div>
@@ -515,12 +526,12 @@ export default function PublishPage() {
 
                 <div className="mb-10">
                     <label className="block text-lg font-bold mb-2">
-                        Featured Image (optional)
+                        Featured Image <span className="text-red-500">*</span>
                     </label>
 
                     {!previewUrl ? (
                         <div
-                            className={`border-2 border-dashed ${isDragging ? 'border-black/50 bg-black/5' : 'border-black/20'} rounded-md p-8 text-center cursor-pointer transition-colors duration-200`}
+                            className={`border-2 border-dashed ${formErrors.mediaFile ? 'border-red-400' : (isDragging ? 'border-black/50 bg-black/5' : 'border-black/20')} rounded-md p-8 text-center cursor-pointer transition-colors duration-200`}
                             onClick={() => fileInputRef.current?.click()}
                             onDragEnter={handleDragEnter}
                             onDragLeave={handleDragLeave}

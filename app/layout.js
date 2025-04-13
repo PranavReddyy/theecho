@@ -3,6 +3,7 @@ import { Tinos } from 'next/font/google';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import TickerTape from '../components/TickerTape';
+import ScrollToTop from '../components/ScrollToTop';
 
 // Define the Tinos font (similar to Times New Roman)
 const tinosFont = Tinos({
@@ -14,7 +15,7 @@ const tinosFont = Tinos({
 
 export const metadata = {
   title: 'The Echo',
-  description: 'Modern university newspaper club platform.',
+  description: 'Official Newspaper of Mahindra University.',
 };
 
 export default function RootLayout({ children }) {
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         <Footer />
+        <ScrollToTop />
       </body>
     </html>
   );

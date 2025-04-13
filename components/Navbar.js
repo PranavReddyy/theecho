@@ -7,6 +7,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, Search } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 export default function Navbar() {
     const [date, setDate] = useState('');
@@ -190,55 +192,82 @@ export default function Navbar() {
                 <div className="max-w-[1200px] mx-auto relative">
                     {/* Mobile menu bar */}
                     <div className="md:hidden flex items-center justify-between px-4 py-2">
-                        <button
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="p-1 text-black focus:outline-none"
-                            aria-label="Toggle menu"
-                        >
-                            {isMenuOpen ? (
-                                <X size={20} />
+                        <AnimatePresence mode="wait">
+                            {!isSearchOpen ? (
+                                <motion.div
+                                    key="mobileMenu"
+                                    className="flex items-center justify-between w-full"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <button
+                                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                        className="p-1 text-black focus:outline-none"
+                                        aria-label="Toggle menu"
+                                    >
+                                        {isMenuOpen ? (
+                                            <X size={20} />
+                                        ) : (
+                                            <Menu size={20} />
+                                        )}
+                                    </button>
+                                    <div className="text-xs font-serif uppercase tracking-wide">
+                                        {pathname.replace('/', '') || 'news'}
+                                    </div>
+                                    <button
+                                        onClick={() => setIsSearchOpen(true)}
+                                        className="p-1 text-black focus:outline-none"
+                                        aria-label="Search"
+                                    >
+                                        <Search size={18} />
+                                    </button>
+                                </motion.div>
                             ) : (
-                                <Menu size={20} />
+                                <motion.form
+                                    key="mobileSearch"
+                                    onSubmit={handleSearch}
+                                    className="flex items-center w-full h-full"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsSearchOpen(false)}
+                                        className="mr-2 text-black/70 hover:text-black transition-colors"
+                                        aria-label="Close search"
+                                    >
+                                        <X size={20} />
+                                    </button>
+                                    <motion.input
+                                        ref={searchInputRef}
+                                        type="text"
+                                        placeholder="Search articles..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="flex-grow py-1 text-sm border-b border-black/30 focus:border-black outline-none bg-transparent"
+                                        autoComplete="off"
+                                        initial={{ width: "80%" }}
+                                        animate={{ width: "100%" }}
+                                        transition={{ duration: .25 }}
+                                    />
+                                    <motion.button
+                                        type="submit"
+                                        className="ml-2 text-black/70 hover:text-black transition-colors"
+                                        aria-label="Submit search"
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        <Search size={18} />
+                                    </motion.button>
+                                </motion.form>
                             )}
-                        </button>
-                        <div className="text-xs font-serif uppercase tracking-wide">
-                            {pathname.replace('/', '') || 'news'}
-                        </div>
-                        <button
-                            onClick={() => setIsSearchOpen(!isSearchOpen)}
-                            className="p-1 text-black focus:outline-none"
-                            aria-label="Search"
-                        >
-                            <Search size={18} />
-                        </button>
+                        </AnimatePresence>
                     </div>
 
-                    {/* Mobile search bar */}
-                    {isSearchOpen && (
-                        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-black/10 z-50 px-4 py-3 shadow-sm">
-                            <form
-                                onSubmit={handleSearch}
-                                className="flex items-center"
-                            >
-                                <input
-                                    ref={searchInputRef}
-                                    type="text"
-                                    placeholder="Search articles..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full p-2 text-sm border-b border-black/30 focus:border-black outline-none bg-transparent"
-                                    autoComplete="off"
-                                />
-                                <button
-                                    type="submit"
-                                    className="ml-2 text-black/70 hover:text-black transition-colors"
-                                    aria-label="Submit search"
-                                >
-                                    <Search size={18} />
-                                </button>
-                            </form>
-                        </div>
-                    )}
 
                     {/* Mobile navigation menu - With dark brown background */}
                     <div
@@ -275,34 +304,59 @@ export default function Navbar() {
 
                             {/* Desktop Search Button & Search Bar */}
                             <div className="relative">
-                                {!isSearchOpen ? (
-                                    <button
-                                        onClick={() => setIsSearchOpen(true)}
-                                        className="p-1 -mr-1 text-black/70 hover:text-black transition-colors"
-                                        aria-label="Open search"
-                                    >
-                                        <Search size={18} />
-                                    </button>
-                                ) : (
-                                    <form onSubmit={handleSearch} className="flex items-center">
-                                        <input
-                                            ref={searchInputRef}
-                                            type="text"
-                                            placeholder="Search articles..."
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            className="w-60 p-1 text-sm border-b border-black/30 focus:border-black outline-none bg-transparent"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsSearchOpen(false)}
-                                            className="ml-2 text-black/70 hover:text-black"
-                                            aria-label="Close search"
+                                <AnimatePresence mode="wait">
+                                    {!isSearchOpen ? (
+                                        <motion.button
+                                            key="searchButton"
+                                            onClick={() => setIsSearchOpen(true)}
+                                            className="p-1 -mr-1 text-black/70 hover:text-black transition-colors"
+                                            aria-label="Open search"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ duration: 0.15 }}
+                                            whileHover={{ scale: 1.1 }}
+                                            whileTap={{ scale: 0.95 }}
                                         >
-                                            <X size={16} />
-                                        </button>
-                                    </form>
-                                )}
+                                            <Search size={18} />
+                                        </motion.button>
+                                    ) : (
+                                        <motion.form
+                                            key="searchForm"
+                                            onSubmit={handleSearch}
+                                            className="flex items-center"
+                                            initial={{ width: 0, opacity: 0 }}
+                                            animate={{ width: "auto", opacity: 1 }}
+                                            exit={{ width: 0, opacity: 0 }}
+                                            transition={{
+                                                duration: 0.25,
+                                                ease: "easeInOut"
+                                            }}
+                                        >
+                                            <motion.input
+                                                ref={searchInputRef}
+                                                type="text"
+                                                placeholder="Search articles..."
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                className="w-60 p-1 text-sm border-b border-black/30 focus:border-black outline-none bg-transparent"
+                                                initial={{ width: "80%" }}
+                                                animate={{ width: "100%" }}
+                                                transition={{ duration: 0.2, delay: 0.1 }}
+                                            />
+                                            <motion.button
+                                                type="button"
+                                                onClick={() => setIsSearchOpen(false)}
+                                                className="ml-2 text-black/70 hover:text-black"
+                                                aria-label="Close search"
+                                                whileHover={{ scale: 1.1 }}
+                                                whileTap={{ scale: 0.95 }}
+                                            >
+                                                <X size={16} />
+                                            </motion.button>
+                                        </motion.form>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </div>
                     </nav>

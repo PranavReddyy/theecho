@@ -258,6 +258,11 @@ export default function ArticleEditor({ articleId }) {
             newErrors.date = 'Date is required';
         }
 
+        // Add image validation
+        if (!formData.imageUrl && !imageFile) {
+            newErrors.image = 'Featured image is required';
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -588,7 +593,7 @@ export default function ArticleEditor({ articleId }) {
                     {/* Featured Image */}
                     <div className="bg-white p-6 rounded-md border border-black/10">
                         <label className="block text-sm font-medium mb-3 text-black/70">
-                            Featured Image
+                            Featured Image <span className="text-red-500">*</span>
                         </label>
 
                         {previewUrl ? (
@@ -623,7 +628,7 @@ export default function ArticleEditor({ articleId }) {
                         ) : (
                             <div
                                 onClick={() => fileInputRef.current?.click()}
-                                className="border-2 border-dashed border-black/20 rounded-md p-8 text-center cursor-pointer hover:border-black/40 transition-colors"
+                                className={`border-2 border-dashed ${errors.image ? 'border-red-400' : 'border-black/20'} rounded-md p-8 text-center cursor-pointer hover:border-black/40 transition-colors`}
                             >
                                 <input
                                     ref={fileInputRef}
