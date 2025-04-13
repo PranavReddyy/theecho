@@ -189,18 +189,27 @@ export default function ArticleClientPage({ category, slug }) {
             {/* Featured image */}
             {article.imageUrl && (
                 <motion.div
-                    className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] mb-8 overflow-hidden"
+                    className="relative mb-8"
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2 }}
                 >
-                    <Image
-                        src={article.imageUrl}
-                        alt={article.title}
-                        fill
-                        className="object-cover"
-                        priority
-                    />
+                    <div className="relative w-full h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+                        <Image
+                            src={article.imageUrl}
+                            alt={article.title}
+                            fill
+                            className="object-cover"
+                            priority
+                        />
+                    </div>
+
+                    {/* Add image credits */}
+                    {article.imageCredits && (
+                        <p className="mt-2 text-xs italic text-black/60 text-center">
+                            {article.imageCredits}
+                        </p>
+                    )}
                 </motion.div>
             )}
 

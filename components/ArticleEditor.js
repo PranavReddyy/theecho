@@ -70,9 +70,10 @@ export default function ArticleEditor({ articleId }) {
         category: 'news',
         author: '',
         date: new Date().toISOString().split('T')[0],
-        status: 'published',  // CHANGED FROM 'draft' to 'published'
+        status: 'published',
         slug: '',
-        imageUrl: ''
+        imageUrl: '',
+        imageCredits: '' // Add this new field
     });
 
     // UI state
@@ -104,9 +105,12 @@ export default function ArticleEditor({ articleId }) {
                 }
 
                 const articleData = docSnap.data();
+
+                // Fix: Ensure imageCredits is always a string
                 setFormData({
                     ...articleData,
-                    date: articleData.date ? new Date(articleData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+                    date: articleData.date ? new Date(articleData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                    imageCredits: articleData.imageCredits || '' // Add this line to provide a default
                 });
 
                 setOriginalSlug(articleData.slug);
@@ -647,6 +651,22 @@ export default function ArticleEditor({ articleId }) {
                         {errors.image && (
                             <p className="mt-2 text-red-600 text-sm">{errors.image}</p>
                         )}
+
+                        <div className="mt-4">
+                            <label htmlFor="imageCredits" className="block text-sm font-medium mb-2 text-black/70">
+                                Image Credits/Source <span className="text-black/40">(optional)</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="imageCredits"
+                                name="imageCredits"
+                                value={formData.imageCredits}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border border-black/20 focus:border-black outline-none transition-colors"
+                                placeholder="e.g., Photo by John Doe, Unsplash, etc."
+                            />
+                            <p className="mt-1 text-xs text-black/50">Attribution for the image source, will be displayed beneath the image</p>
+                        </div>
                     </div>
                 </div>
             </div>

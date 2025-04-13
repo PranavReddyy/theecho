@@ -311,6 +311,15 @@ export default function CategoryClientPage({ category }) {
                                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                 />
                                             </motion.div>
+
+                                            {/* Add image credits */}
+                                            {article.imageCredits && (
+                                                <div className="absolute bottom-0 left-0 right-0 bg-black/30 px-2 py-1">
+                                                    <p className="text-xs italic text-white/80 truncate">
+                                                        {article.imageCredits}
+                                                    </p>
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Content */}
