@@ -35,7 +35,8 @@ export default function PublishPage() {
         fullArticle: '',
         authorName: '',
         category: 'news',
-        mediaFile: null
+        mediaFile: null,
+        imageCredits: '' // Add image credits field
     });
 
     // Form validation state
@@ -208,7 +209,8 @@ export default function PublishPage() {
                 status: 'pending', // Pending admin review
                 date: new Date().toISOString(),
                 createdAt: serverTimestamp(),
-                slug: generateSlug(formData.title)
+                slug: generateSlug(formData.title),
+                imageCredits: formData.imageCredits || '' // Include image credits
             };
 
             let imageUrl = null;
@@ -255,7 +257,8 @@ export default function PublishPage() {
                 fullArticle: '',
                 authorName: '',
                 category: 'news',
-                mediaFile: null
+                mediaFile: null,
+                imageCredits: ''
             });
             setPreviewUrl(null);
 
@@ -283,9 +286,9 @@ export default function PublishPage() {
     };
 
     return (
-        <div className="py-8">
+        <div className="py-4 sm:py-8 px-4 sm:px-0">
             <motion.h1
-                className="text-4xl font-bold mb-4 text-center"
+                className="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 text-center"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
@@ -294,7 +297,7 @@ export default function PublishPage() {
             </motion.h1>
 
             <motion.p
-                className="text-lg text-center mb-12 max-w-2xl mx-auto text-black/80"
+                className="text-base sm:text-lg text-center mb-8 sm:mb-12 max-w-2xl mx-auto text-black/80 px-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
@@ -306,16 +309,16 @@ export default function PublishPage() {
             <AnimatePresence>
                 {submitSuccess && (
                     <motion.div
-                        className="max-w-3xl mx-auto mb-10"
+                        className="max-w-3xl mx-auto mb-8 sm:mb-10 px-4 sm:px-0"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.4 }}
                     >
-                        <div className="bg-green-50 border border-green-200 text-green-800 rounded-md p-6 flex items-start">
-                            <CheckCircle className="mr-3 h-6 w-6 flex-shrink-0 text-green-600" />
+                        <div className="bg-green-50 border border-green-200 text-green-800 rounded-md p-4 sm:p-6 flex flex-col sm:flex-row items-start">
+                            <CheckCircle className="mb-2 sm:mb-0 sm:mr-3 h-6 w-6 flex-shrink-0 text-green-600" />
                             <div>
-                                <h3 className="text-xl font-bold mb-2">Article Submitted Successfully</h3>
+                                <h3 className="text-lg sm:text-xl font-bold mb-2">Article Submitted Successfully</h3>
                                 <p>Thank you for your submission! Our editorial team will review your article within 48-72 hours.</p>
                             </div>
                         </div>
@@ -325,7 +328,7 @@ export default function PublishPage() {
 
             {/* Information Accordions */}
             <motion.div
-                className="mb-12 max-w-3xl mx-auto"
+                className="mb-8 sm:mb-12 max-w-3xl mx-auto px-4 sm:px-0"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
@@ -333,7 +336,7 @@ export default function PublishPage() {
                 {/* Submission Guidelines */}
                 <div className="border-b border-black/10 pb-2">
                     <button
-                        className="w-full flex justify-between items-center py-4 text-xl font-bold group"
+                        className="w-full flex justify-between items-center py-3 sm:py-4 text-lg sm:text-xl font-bold group"
                         onClick={() => handleToggleSection('guidelines')}
                     >
                         <span className="group-hover:text-black/80 transition-colors">Submission Guidelines</span>
@@ -352,8 +355,8 @@ export default function PublishPage() {
                                 transition={{ duration: 0.3 }}
                                 className="overflow-hidden"
                             >
-                                <div className="py-4 px-2 text-black/80">
-                                    <ul className="list-disc pl-5 space-y-3">
+                                <div className="py-4 px-2 text-black/80 text-sm sm:text-base">
+                                    <ul className="list-disc pl-5 space-y-2 sm:space-y-3">
                                         <li>Articles should be between 300-1500 words.</li>
                                         <li>Keep language respectful and appropriate for all audiences.</li>
                                         <li>Original content only - plagiarism is strictly prohibited.</li>
@@ -370,7 +373,7 @@ export default function PublishPage() {
                 {/* Submission Process */}
                 <div className="border-b border-black/10 pb-2">
                     <button
-                        className="w-full flex justify-between items-center py-4 text-xl font-bold group"
+                        className="w-full flex justify-between items-center py-3 sm:py-4 text-lg sm:text-xl font-bold group"
                         onClick={() => handleToggleSection('process')}
                     >
                         <span className="group-hover:text-black/80 transition-colors">Review Process</span>
@@ -389,8 +392,8 @@ export default function PublishPage() {
                                 transition={{ duration: 0.3 }}
                                 className="overflow-hidden"
                             >
-                                <div className="py-4 px-2 text-black/80">
-                                    <ol className="list-decimal pl-5 space-y-3">
+                                <div className="py-4 px-2 text-black/80 text-sm sm:text-base">
+                                    <ol className="list-decimal pl-5 space-y-2 sm:space-y-3">
                                         <li>Submit your article using the form below.</li>
                                         <li>Our editorial team reviews submissions within 48-72 hours.</li>
                                         <li>You may be contacted for edits or clarifications.</li>
@@ -408,7 +411,7 @@ export default function PublishPage() {
             <motion.form
                 ref={formRef}
                 onSubmit={handleSubmit}
-                className="max-w-3xl mx-auto"
+                className="max-w-3xl mx-auto px-4 sm:px-0"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
@@ -420,8 +423,8 @@ export default function PublishPage() {
                     </div>
                 )}
 
-                <div className="mb-8">
-                    <label htmlFor="title" className="block text-lg font-bold mb-2">
+                <div className="mb-6 sm:mb-8">
+                    <label htmlFor="title" className="block text-base sm:text-lg font-bold mb-2">
                         Article Title <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -430,7 +433,7 @@ export default function PublishPage() {
                         name="title"
                         value={formData.title}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 border ${formErrors.title ? 'border-red-400' : 'border-black/20'} focus:border-black transition-colors duration-200 outline-none`}
+                        className={`w-full px-3 sm:px-4 py-2 sm:py-3 border ${formErrors.title ? 'border-red-400' : 'border-black/20'} focus:border-black transition-colors duration-200 outline-none`}
                         placeholder="Enter a compelling title"
                     />
                     <div className="mt-1 flex justify-between">
@@ -443,8 +446,8 @@ export default function PublishPage() {
                     </div>
                 </div>
 
-                <div className="mb-8">
-                    <label htmlFor="category" className="block text-lg font-bold mb-2">
+                <div className="mb-6 sm:mb-8">
+                    <label htmlFor="category" className="block text-base sm:text-lg font-bold mb-2">
                         Category <span className="text-red-500">*</span>
                     </label>
                     <select
@@ -452,7 +455,7 @@ export default function PublishPage() {
                         name="category"
                         value={formData.category}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-black/20 focus:border-black transition-colors duration-200 outline-none appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22m6 9 6 6 6-6%22/></svg>')] bg-no-repeat bg-[position:right_16px_center] pr-12"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-black/20 focus:border-black transition-colors duration-200 outline-none appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2220%22 height=%2220%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22m6 9 6 6 6-6%22/></svg>')] bg-no-repeat bg-[position:right_16px_center] pr-12"
                     >
                         <option value="news">News</option>
                         <option value="ae">Arts & Entertainment</option>
@@ -462,8 +465,8 @@ export default function PublishPage() {
                     <p className="text-xs text-black/50 mt-1">Select the most appropriate section for your article</p>
                 </div>
 
-                <div className="mb-8">
-                    <label htmlFor="shortDescription" className="block text-lg font-bold mb-2">
+                <div className="mb-6 sm:mb-8">
+                    <label htmlFor="shortDescription" className="block text-base sm:text-lg font-bold mb-2">
                         Short Description <span className="text-red-500">*</span>
                     </label>
                     <textarea
@@ -472,7 +475,7 @@ export default function PublishPage() {
                         value={formData.shortDescription}
                         onChange={handleInputChange}
                         rows="3"
-                        className={`w-full px-4 py-3 border ${formErrors.shortDescription ? 'border-red-400' : 'border-black/20'} focus:border-black transition-colors duration-200 outline-none`}
+                        className={`w-full px-3 sm:px-4 py-2 sm:py-3 border ${formErrors.shortDescription ? 'border-red-400' : 'border-black/20'} focus:border-black transition-colors duration-200 outline-none`}
                         placeholder="Provide a brief summary of your article"
                     ></textarea>
                     <div className="mt-1 flex justify-between">
@@ -485,8 +488,8 @@ export default function PublishPage() {
                     </div>
                 </div>
 
-                <div className="mb-8">
-                    <label htmlFor="fullArticle" className="block text-lg font-bold mb-2">
+                <div className="mb-6 sm:mb-8">
+                    <label htmlFor="fullArticle" className="block text-base sm:text-lg font-bold mb-2">
                         Full Article <span className="text-red-500">*</span>
                     </label>
                     <textarea
@@ -494,8 +497,8 @@ export default function PublishPage() {
                         name="fullArticle"
                         value={formData.fullArticle}
                         onChange={handleInputChange}
-                        rows="12"
-                        className={`w-full px-4 py-3 border ${formErrors.fullArticle ? 'border-red-400' : 'border-black/20'} focus:border-black transition-colors duration-200 outline-none`}
+                        rows={12}
+                        className={`w-full px-3 sm:px-4 py-2 sm:py-3 border ${formErrors.fullArticle ? 'border-red-400' : 'border-black/20'} focus:border-black transition-colors duration-200 outline-none`}
                         placeholder="Write your complete article here"
                     ></textarea>
                     <div className="mt-1 flex justify-between">
@@ -508,8 +511,8 @@ export default function PublishPage() {
                     </div>
                 </div>
 
-                <div className="mb-8">
-                    <label htmlFor="authorName" className="block text-lg font-bold mb-2">
+                <div className="mb-6 sm:mb-8">
+                    <label htmlFor="authorName" className="block text-base sm:text-lg font-bold mb-2">
                         Your Name
                     </label>
                     <input
@@ -518,20 +521,20 @@ export default function PublishPage() {
                         name="authorName"
                         value={formData.authorName}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-black/20 focus:border-black transition-colors duration-200 outline-none"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-black/20 focus:border-black transition-colors duration-200 outline-none"
                         placeholder="Enter your name"
                     />
                     <p className="text-xs text-black/50 mt-1">Leave blank to publish as &quot;Anonymous&quot;</p>
                 </div>
 
-                <div className="mb-10">
-                    <label className="block text-lg font-bold mb-2">
+                <div className="mb-6 sm:mb-8">
+                    <label className="block text-base sm:text-lg font-bold mb-2">
                         Featured Image <span className="text-red-500">*</span>
                     </label>
 
                     {!previewUrl ? (
                         <div
-                            className={`border-2 border-dashed ${formErrors.mediaFile ? 'border-red-400' : (isDragging ? 'border-black/50 bg-black/5' : 'border-black/20')} rounded-md p-8 text-center cursor-pointer transition-colors duration-200`}
+                            className={`border-2 border-dashed ${formErrors.mediaFile ? 'border-red-400' : (isDragging ? 'border-black/50 bg-black/5' : 'border-black/20')} rounded-md p-4 sm:p-8 text-center cursor-pointer transition-colors duration-200`}
                             onClick={() => fileInputRef.current?.click()}
                             onDragEnter={handleDragEnter}
                             onDragLeave={handleDragLeave}
@@ -547,8 +550,8 @@ export default function PublishPage() {
                                 accept="image/*"
                                 className="hidden"
                             />
-                            <UploadIcon size={32} className="mx-auto mb-4 text-black/60" />
-                            <p className="mb-1 text-black/80">Drag and drop an image here or click to browse</p>
+                            <UploadIcon size={28} className="mx-auto mb-3 text-black/60" />
+                            <p className="mb-1 text-sm sm:text-base text-black/80">Drag and drop an image here or click to browse</p>
                             <p className="text-xs text-black/50">JPG, PNG or GIF, recommended size 1200×800px</p>
 
                             {formErrors.mediaFile && (
@@ -557,7 +560,7 @@ export default function PublishPage() {
                         </div>
                     ) : (
                         <div className="relative rounded-md overflow-hidden border border-black/10">
-                            <div className="relative h-[240px] w-full">
+                            <div className="relative h-[180px] sm:h-[240px] w-full">
                                 <Image
                                     src={previewUrl}
                                     alt="Image preview"
@@ -578,26 +581,43 @@ export default function PublishPage() {
                             </div>
                         </div>
                     )}
+
+                    {/* Add Image Credits field */}
+                    <div className="mt-4">
+                        <label htmlFor="imageCredits" className="block text-sm font-medium mb-2 text-black/70">
+                            Image Credits/Source <span className="text-black/40">(optional)</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="imageCredits"
+                            name="imageCredits"
+                            value={formData.imageCredits}
+                            onChange={handleInputChange}
+                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-black/20 focus:border-black transition-colors duration-200 outline-none"
+                            placeholder="e.g., Photo by John Doe, Unsplash, etc."
+                        />
+                        <p className="mt-1 text-xs text-black/50">Attribution for the image source, will be displayed beneath the image</p>
+                    </div>
                 </div>
 
-                <div className="text-center mb-12">
+                <div className="text-center mb-8 sm:mb-12">
                     <motion.button
                         type="submit"
                         disabled={isSubmitting}
-                        className="bg-black text-white px-10 py-3 text-lg font-bold hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
+                        className="bg-black text-white px-6 sm:px-10 py-2 sm:py-3 text-base sm:text-lg font-bold hover:bg-gray-800 disabled:bg-gray-400 transition-colors w-full sm:w-auto"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                     >
                         {isSubmitting ? (
                             <span className="flex items-center justify-center">
-                                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
+                                <span className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></span>
                                 Submitting...
                             </span>
                         ) : 'Submit Article'}
                     </motion.button>
                 </div>
 
-                <div className="text-center text-sm text-black/50 italic">
+                <div className="text-center text-xs sm:text-sm text-black/50 italic">
                     By submitting, you agree to our community guidelines and editorial standards.
                 </div>
             </motion.form>
